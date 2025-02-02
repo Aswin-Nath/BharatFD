@@ -18,7 +18,7 @@ function FAQ() {
 
     const fetchFAQs = useCallback(async () => {
         try {
-            const response = await fetch("http://localhost:5000/faqs");
+            const response = await fetch("https://backend-6jqv.onrender.com/faqs");
             const data = await response.json();
 
             if (selectedLanguage !== "en") {

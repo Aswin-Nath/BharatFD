@@ -15,7 +15,7 @@ function Queries() {
 
   const fetchQueries = async () => {
     try {
-      const response = await fetch("http://localhost:5000/queries");
+      const response = await fetch("https://backend-6jqv.onrender.com/queries");
       const data = await response.json();
       setQueries(data.sort((a, b) => a.isAnswered - b.isAnswered));
     } catch (error) {
@@ -38,7 +38,7 @@ function Queries() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/respond-query", {
+      const res = await fetch("https://backend-6jqv.onrender.com/respond-query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, answer: response[id] }),
@@ -59,7 +59,7 @@ function Queries() {
 
   const addToFAQ = async (id, question, answer) => {
     try {
-      const res = await fetch("http://localhost:5000/add-to-faq", {
+      const res = await fetch("https://backend-6jqv.onrender.com/add-to-faq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, answer }),

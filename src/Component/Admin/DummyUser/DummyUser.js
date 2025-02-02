@@ -14,7 +14,7 @@ function DummyUser() {
     setIsSubmitting(true); // Disable button during request
 
     try {
-      const response = await fetch("http://localhost:5000/add-query", {
+      const response = await fetch("https://backend-6jqv.onrender.com/add-query", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

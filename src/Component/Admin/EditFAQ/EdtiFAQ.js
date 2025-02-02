@@ -12,7 +12,7 @@ function EditFAQ() {
 
   const fetchFAQs = async () => {
     try {
-      const response = await fetch("http://localhost:5000/faqs");
+      const response = await fetch("https://backend-6jqv.onrender.com/faqs");
       const data = await response.json();
       setFaqs(data);
     } catch (error) {
@@ -25,7 +25,7 @@ function EditFAQ() {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/delete-faq/${id}`, {
+      const response = await fetch(`https://backend-6jqv.onrender.com/delete-faq/${id}`, {
         method: "DELETE",
       });
 
