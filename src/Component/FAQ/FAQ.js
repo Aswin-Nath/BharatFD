@@ -7,37 +7,14 @@ function FAQ() {
     const [faqs, setFaqs] = useState([]);
     const [filteredFaqs, setFilteredFaqs] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    
     const [openIndexes, setOpenIndexes] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLanguage, setSelectedLanguage] = useState("en");
     const faqsPerPage = 5;
+    
 
-    const translatorKey = "EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
-    const endpoint = "https://api.cognitive.microsofttranslator.com";
-    const location = "centralindia";
-
-    const fetchFAQs = useCallback(async () => {
-        try {
-            const response = await fetch("https://backend-6jqv.onrender.com/faqs");
-            const data = await response.json();
-
-            if (selectedLanguage !== "en") {
-                const translatedFAQs = await translateFAQs(data, selectedLanguage);
-                setFaqs(translatedFAQs);
-                setFilteredFaqs(translatedFAQs);
-            } else {
-                setFaqs(data);
-                setFilteredFaqs(data);
-            }
-        } catch (error) {
-            console.error("Error fetching FAQs:", error);
-        }
-    }, [selectedLanguage]);
-
-    useEffect(() => {
-        fetchFAQs();
-    }, [fetchFAQs]);
-
+    
     const translateFAQs = async (faqs, targetLanguage) => {
         try {
             const translations = await Promise.all(
@@ -81,12 +58,36 @@ function FAQ() {
             return text;
         }
     };
-
+    const a="EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
     const toggleAnswer = (index) => {
         setOpenIndexes((prevIndexes) =>
             prevIndexes.includes(index) ? prevIndexes.filter((i) => i !== index) : [...prevIndexes, index]
         );
     };
+    const translatorKey = a;
+    const endpoint = "https://api.cognitive.microsofttranslator.com";
+    const location = "centralindia";
+
+    const fetchFAQs = useCallback(async () => {
+        try {
+            const response = await fetch("https://backend-6jqv.onrender.com/faqs");
+            const data = await response.json();
+
+            if (selectedLanguage !== "en") {
+                const translatedFAQs = await translateFAQs(data, selectedLanguage);
+                setFaqs(translatedFAQs);
+                setFilteredFaqs(translatedFAQs);
+            } else {
+                setFaqs(data);
+                setFilteredFaqs(data);
+            }
+        } catch (error) {
+            console.error("Error fetching FAQs:", error);
+        }
+    }, [selectedLanguage]);
+    useEffect(() => {
+        fetchFAQs();
+    }, [fetchFAQs]);
 
     const handleSearch = (e) => {
         const query = e.target.value.toLowerCase();
