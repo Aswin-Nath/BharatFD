@@ -1,0 +1,47 @@
+/* Home Container */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    transition: background 0.5s ease-in-out;
+  }
+  
+  /* Button Styling */
+  .button {
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 50px;
+    display: inline-block;
+    text-align: center;
+    margin: 20px;
+    width: 250px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* FAQ Button */
+  .button:nth-child(1) {
+    background: linear-gradient(to right, #ff7e5f, #ff416c);
+  }
+  
+  /* Admin Button */
+  .button:nth-child(2) {
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+  }
+  
+  /* Hover Effect */
+  .button:hover {
+    transform: scale(1.1);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Click Effect */
+  .button:active {
+    transform: scale(0.95);
+  }
+  

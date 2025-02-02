@@ -1,0 +1,120 @@
+/* Main FAQ Container */
+.faq-container {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+/* Title */
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.language-selector label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.language-selector select {
+  padding: 8px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.language-selector select:focus {
+  border-color: #007bff;
+}
+
+/* Search Bar */
+.search-bar {
+  width: 60%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.search-bar:focus {
+  border-color: #007bff;
+}
+
+/* FAQ List */
+.faq-list {
+  max-width: 600px;
+  margin: auto;
+  text-align: left;
+}
+
+/* FAQ Item */
+.faq-item {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  padding: 12px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Question */
+.faq-question {
+  font-weight: bold;
+  font-size: 18px;
+  color: #007bff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 12px;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Pagination Buttons */
+.page-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.page-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.page-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

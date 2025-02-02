@@ -1,0 +1,75 @@
+/* Main Container */
+.dummy-user-container {
+    text-align: center;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Heading */
+  h2 {
+    font-size: 26px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Textarea */
+  textarea {
+    width: 80%;
+    max-width: 500px;
+    height: 150px;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    resize: none;
+    background-color: white;
+    transition: border 0.3s, box-shadow 0.3s;
+  }
+  
+  /* Focus Effect */
+  textarea:focus {
+    border-color: #ff4747;
+    box-shadow: 0px 0px 10px rgba(255, 71, 71, 0.3);
+    outline: none;
+  }
+  
+  /* Button Container */
+  .button-container {
+    margin-top: 15px;
+  }
+  
+  /* Button */
+  button {
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(to right, #ff4747, #ff0000);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Hover Effect */
+  button:hover {
+    background: linear-gradient(to right, #ff0000, #d40000);
+    transform: scale(1.05);
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Disabled Button */
+  button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  

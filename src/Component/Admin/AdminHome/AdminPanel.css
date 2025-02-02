@@ -1,0 +1,63 @@
+.admin-panel-container {
+    text-align: center;
+    padding: 50px;
+    background-color: #f9f9f9;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.3s;
+    display: inline-block;
+    text-align: center;
+    width: 250px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .unanswered {
+    background: linear-gradient(to right, #ff7e5f, #ff416c);
+  }
+  
+  .answered {
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+  }
+  
+  .edit-faq {
+    background: linear-gradient(to right, #36d1dc, #5b86e5);
+  }
+  
+  .dummy-user {
+    background: linear-gradient(to right, #ff9a44, #fc6076);
+  }
+  
+  .nav-links a:hover {
+    transform: scale(1.05);
+    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .nav-links a:active {
+    transform: scale(0.95);
+  }
+  
