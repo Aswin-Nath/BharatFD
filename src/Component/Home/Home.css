@@ -1,65 +1,51 @@
-.admin-panel-container {
-    text-align: center;
-    padding: 50px;
-    background-color: #f9f9f9;
-    height: 100vh;
+/* Home Container */
+.home-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  
-  h2 {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    position: relative;
-    bottom: 50px;
-  }
-  
-  .nav-links a {
+    height: 100vh;
+    background: #f8f8f8; /* Light gray background */
+}
+
+/* Button Styling */
+.button {
     text-decoration: none;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
     color: white;
-    padding: 12px 25px;
-    border-radius: 8px;
-    transition: transform 0.2s, box-shadow 0.3s;
+    padding: 15px 40px;
+    border-radius: 12px;  /* Adjusted rounded corners */
     display: inline-block;
     text-align: center;
+    margin: 10px;
     width: 250px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .unanswered {
+    transition: all 0.3s ease-in-out;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Queries Button */
+.button:nth-child(1) {
     background: linear-gradient(to right, #ff7e5f, #ff416c);
-  }
-  
-  .answered {
-    background: linear-gradient(to right, #56ab2f, #a8e063);
-  }
-  
-  .edit-faq {
-    background: linear-gradient(to right, #36d1dc, #5b86e5);
-  }
-  
-  .dummy-user {
-    background: linear-gradient(to right, #ff9a44, #fc6076);
-  }
-  
-  .nav-links a:hover {
+}
+
+/* Edit FAQ Button */
+.button:nth-child(2) {
+    background: linear-gradient(to right, #56ccf2, #2f80ed);
+}
+
+/* Dummy User Button */
+.button:nth-child(3) {
+    background: linear-gradient(to right, #f7971e, #ff5858);
+}
+
+/* Hover Effect */
+.button:hover {
     transform: scale(1.05);
-    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  .nav-links a:active {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Click Effect */
+.button:active {
     transform: scale(0.95);
-  }
-  
+}
