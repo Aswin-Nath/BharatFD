@@ -7,14 +7,23 @@ function FAQ() {
     const [faqs, setFaqs] = useState([]);
     const [filteredFaqs, setFilteredFaqs] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    
     const [openIndexes, setOpenIndexes] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLanguage, setSelectedLanguage] = useState("en");
-    const faqsPerPage = 5;
-    
+    const [faqsPerPage, setFaqsPerPage] = useState(5);
+    const [customPage, setCustomPage] = useState("");
 
-    
+    const a = "EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
+    const translatorKey = a;
+    const endpoint = "https://api.cognitive.microsofttranslator.com";
+    const location = "centralindia";
+
+    const toggleAnswer = (index) => {
+        setOpenIndexes((prevIndexes) =>
+            prevIndexes.includes(index) ? prevIndexes.filter((i) => i !== index) : [...prevIndexes, index]
+        );
+    };
+
     const translateFAQs = async (faqs, targetLanguage) => {
         try {
             const translations = await Promise.all(
@@ -58,15 +67,6 @@ function FAQ() {
             return text;
         }
     };
-    const a="EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
-    const toggleAnswer = (index) => {
-        setOpenIndexes((prevIndexes) =>
-            prevIndexes.includes(index) ? prevIndexes.filter((i) => i !== index) : [...prevIndexes, index]
-        );
-    };
-    const translatorKey = a;
-    const endpoint = "https://api.cognitive.microsofttranslator.com";
-    const location = "centralindia";
 
     const fetchFAQs = useCallback(async () => {
         try {
@@ -85,6 +85,7 @@ function FAQ() {
             console.error("Error fetching FAQs:", error);
         }
     }, [selectedLanguage]);
+
     useEffect(() => {
         fetchFAQs();
     }, [fetchFAQs]);
@@ -110,17 +111,22 @@ function FAQ() {
 
     const totalPages = Math.ceil(filteredFaqs.length / faqsPerPage);
 
-    const nextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
+    const handlePageChange = (pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
             setOpenIndexes([]);
         }
     };
 
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-            setOpenIndexes([]);
+    const handleCustomPageChange = (e) => {
+        setCustomPage(e.target.value);
+    };
+
+    const jumpToPage = () => {
+        const pageNumber = parseInt(customPage, 10);
+        if (!isNaN(pageNumber)) {
+            handlePageChange(pageNumber);
+            setCustomPage("");
         }
     };
 
@@ -130,23 +136,17 @@ function FAQ() {
 
             {/* Language Dropdown */}
             <div className="language-selector">
-                <label htmlFor="language-dropdown">Select Language:</label>
-                <div className="custom-dropdown">
-                    <select
-                        id="language-dropdown"
-                        value={selectedLanguage}
-                        onChange={(e) => setSelectedLanguage(e.target.value)}
-                    >
-                        <option value="en">English</option>
-                        <option value="fr">French</option>
-                        <option value="es">Spanish</option>
-                        <option value="de">German</option>
-                        <option value="zh-Hans">Chinese (Simplified)</option>
-                        <option value="hi">Hindi</option>
-                        <option value="bn">Bengali</option>
-                        <option value="ta">Tamil</option>
-                    </select>
-                </div>
+                <label>Select Language:</label>
+                <select value={selectedLanguage} onChange={(e) => setSelectedLanguage(e.target.value)}>
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="de">German</option>
+                    <option value="zh-Hans">Chinese (Simplified)</option>
+                    <option value="hi">Hindi</option>
+                    <option value="bn">Bengali</option>
+                    <option value="ta">Tamil</option>
+                </select>
             </div>
 
             {/* Search Bar */}
@@ -157,6 +157,14 @@ function FAQ() {
                 value={searchQuery}
                 onChange={handleSearch}
             />
+
+            {/* Items Per Page Selection */}
+            <label>Show: </label>
+            <select value={faqsPerPage} onChange={(e) => setFaqsPerPage(Number(e.target.value))}>
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+            </select>
 
             {/* FAQ List */}
             <div className="faq-list">
@@ -177,12 +185,25 @@ function FAQ() {
             {/* Pagination */}
             {totalPages > 1 && (
                 <div className="pagination">
-                    <button onClick={prevPage} disabled={currentPage === 1} className="nav-button">
+                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                         Previous
                     </button>
-                    <button onClick={nextPage} disabled={currentPage === totalPages} className="nav-button">
+                    {[...Array(totalPages)].map((_, i) => (
+                        <button
+                            key={i}
+                            className={currentPage === i + 1 ? "active" : ""}
+                            onClick={() => handlePageChange(i + 1)}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
                         Next
                     </button>
+
+                    {/* Custom Page Jump */}
+                    <input type="number" value={customPage} onChange={handleCustomPageChange} placeholder="Go to page" />
+                    <button onClick={jumpToPage}>Go</button>
                 </div>
             )}
         </div>
