@@ -10,20 +10,33 @@ function FAQ() {
     const [openIndexes, setOpenIndexes] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLanguage, setSelectedLanguage] = useState("en");
-    const [faqsPerPage, setFaqsPerPage] = useState(5);
-    const [customPage, setCustomPage] = useState("");
-    const [isLoading, setIsLoading] = useState(true); // 🔹 Added loading state
+    const faqsPerPage = 5;
 
-    const a = "EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
-    const translatorKey = a;
+    const translatorKey = "EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
     const endpoint = "https://api.cognitive.microsofttranslator.com";
     const location = "centralindia";
 
-    const toggleAnswer = (index) => {
-        setOpenIndexes((prevIndexes) =>
-            prevIndexes.includes(index) ? prevIndexes.filter((i) => i !== index) : [...prevIndexes, index]
-        );
-    };
+    const fetchFAQs = useCallback(async () => {
+        try {
+            const response = await fetch("https://backend-omega-seven-22.vercel.app/faqs");
+            const data = await response.json();
+
+            if (selectedLanguage !== "en") {
+                const translatedFAQs = await translateFAQs(data, selectedLanguage);
+                setFaqs(translatedFAQs);
+                setFilteredFaqs(translatedFAQs);
+            } else {
+                setFaqs(data);
+                setFilteredFaqs(data);
+            }
+        } catch (error) {
+            console.error("Error fetching FAQs:", error);
+        }
+    }, [selectedLanguage]);
+
+    useEffect(() => {
+        fetchFAQs();
+    }, [fetchFAQs]);
 
     const translateFAQs = async (faqs, targetLanguage) => {
         try {
@@ -69,29 +82,11 @@ function FAQ() {
         }
     };
 
-    const fetchFAQs = useCallback(async () => {
-        setIsLoading(true); // 🔹 Show loading before fetching starts
-        try {
-            const response = await fetch("https://backend-omega-seven-22.vercel.app/faqs");
-            const data = await response.json();
-
-            if (selectedLanguage !== "en") {
-                const translatedFAQs = await translateFAQs(data, selectedLanguage);
-                setFaqs(translatedFAQs);
-                setFilteredFaqs(translatedFAQs);
-            } else {
-                setFaqs(data);
-                setFilteredFaqs(data);
-            }
-        } catch (error) {
-            console.error("Error fetching FAQs:", error);
-        }
-        setIsLoading(false); // 🔹 Hide loading after data is fetched
-    }, [selectedLanguage]);
-
-    useEffect(() => {
-        fetchFAQs();
-    }, [fetchFAQs]);
+    const toggleAnswer = (index) => {
+        setOpenIndexes((prevIndexes) =>
+            prevIndexes.includes(index) ? prevIndexes.filter((i) => i !== index) : [...prevIndexes, index]
+        );
+    };
 
     const handleSearch = (e) => {
         const query = e.target.value.toLowerCase();
@@ -114,22 +109,17 @@ function FAQ() {
 
     const totalPages = Math.ceil(filteredFaqs.length / faqsPerPage);
 
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
+    const nextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
             setOpenIndexes([]);
         }
     };
 
-    const handleCustomPageChange = (e) => {
-        setCustomPage(e.target.value);
-    };
-
-    const jumpToPage = () => {
-        const pageNumber = parseInt(customPage, 10);
-        if (!isNaN(pageNumber)) {
-            handlePageChange(pageNumber);
-            setCustomPage("");
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+            setOpenIndexes([]);
         }
     };
 
@@ -139,17 +129,23 @@ function FAQ() {
 
             {/* Language Dropdown */}
             <div className="language-selector">
-                <label>Select Language:</label>
-                <select value={selectedLanguage} onChange={(e) => setSelectedLanguage(e.target.value)}>
-                    <option value="en">English</option>
-                    <option value="fr">French</option>
-                    <option value="es">Spanish</option>
-                    <option value="de">German</option>
-                    <option value="zh-Hans">Chinese (Simplified)</option>
-                    <option value="hi">Hindi</option>
-                    <option value="bn">Bengali</option>
-                    <option value="ta">Tamil</option>
-                </select>
+                <label htmlFor="language-dropdown">Select Language:</label>
+                <div className="custom-dropdown">
+                    <select
+                        id="language-dropdown"
+                        value={selectedLanguage}
+                        onChange={(e) => setSelectedLanguage(e.target.value)}
+                    >
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="de">German</option>
+                        <option value="zh-Hans">Chinese (Simplified)</option>
+                        <option value="hi">Hindi</option>
+                        <option value="bn">Bengali</option>
+                        <option value="ta">Tamil</option>
+                    </select>
+                </div>
             </div>
 
             {/* Search Bar */}
@@ -161,56 +157,31 @@ function FAQ() {
                 onChange={handleSearch}
             />
 
-            {/* Items Per Page Selection */}
-            <label>Show: </label>
-            <select value={faqsPerPage} onChange={(e) => setFaqsPerPage(Number(e.target.value))}>
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={15}>15</option>
-            </select>
-
-            {/* Loading Indicator */}
-            {isLoading ? (
-                <div className="loading-spinner"></div> // 🔹 Loading Animation
-            ) : (
-                <div className="faq-list">
-                    {currentFaqs.length > 0 ? (
-                        currentFaqs.map((faq, index) => (
-                            <div key={index} className={`faq-item ${openIndexes.includes(index) ? "open" : ""}`}>
-                                <div className="faq-question" onClick={() => toggleAnswer(index)}>
-                                    {faq.QuestionContent}
-                                </div>
-                                {openIndexes.includes(index) && <div className="faq-answer">{faq.AnswerContent}</div>}
+            {/* FAQ List */}
+            <div className="faq-list">
+                {currentFaqs.length > 0 ? (
+                    currentFaqs.map((faq, index) => (
+                        <div key={index} className={`faq-item ${openIndexes.includes(index) ? "open" : ""}`}>
+                            <div className="faq-question" onClick={() => toggleAnswer(index)}>
+                                {faq.QuestionContent}
                             </div>
-                        ))
-                    ) : (
-                        <p>No FAQs found.</p>
-                    )}
-                </div>
-            )}
+                            {openIndexes.includes(index) && <div className="faq-answer">{faq.AnswerContent}</div>}
+                        </div>
+                    ))
+                ) : (
+                    <p>No FAQs found.</p>
+                )}
+            </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
                 <div className="pagination">
-                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                    <button onClick={prevPage} disabled={currentPage === 1} className="nav-button">
                         Previous
                     </button>
-                    {[...Array(totalPages)].map((_, i) => (
-                        <button
-                            key={i}
-                            className={currentPage === i + 1 ? "active" : ""}
-                            onClick={() => handlePageChange(i + 1)}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
-                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                    <button onClick={nextPage} disabled={currentPage === totalPages} className="nav-button">
                         Next
                     </button>
-
-                    {/* Custom Page Jump */}
-                    <input type="number" value={customPage} onChange={handleCustomPageChange} placeholder="Go to page" />
-                    <button onClick={jumpToPage}>Go</button>
                 </div>
             )}
         </div>
