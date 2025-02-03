@@ -12,6 +12,7 @@ function FAQ() {
     const [selectedLanguage, setSelectedLanguage] = useState("en");
     const [faqsPerPage, setFaqsPerPage] = useState(5);
     const [customPage, setCustomPage] = useState("");
+    const [isLoading, setIsLoading] = useState(true); // 🔹 Added loading state
 
     const a = "EJUeODtTupbdSgg1irpE2SeRVQHzCPpLkvR8oECVGtnoovOT1skBJQQJ99BBACGhslBXJ3w3AAAbACOGNOXb";
     const translatorKey = a;
@@ -69,8 +70,9 @@ function FAQ() {
     };
 
     const fetchFAQs = useCallback(async () => {
+        setIsLoading(true); // 🔹 Show loading before fetching starts
         try {
-            const response = await fetch("https://backend-6jqv.onrender.com/faqs");
+            const response = await fetch("https://backend-omega-seven-22.vercel.app/faqs");
             const data = await response.json();
 
             if (selectedLanguage !== "en") {
@@ -84,6 +86,7 @@ function FAQ() {
         } catch (error) {
             console.error("Error fetching FAQs:", error);
         }
+        setIsLoading(false); // 🔹 Hide loading after data is fetched
     }, [selectedLanguage]);
 
     useEffect(() => {
@@ -166,21 +169,25 @@ function FAQ() {
                 <option value={15}>15</option>
             </select>
 
-            {/* FAQ List */}
-            <div className="faq-list">
-                {currentFaqs.length > 0 ? (
-                    currentFaqs.map((faq, index) => (
-                        <div key={index} className={`faq-item ${openIndexes.includes(index) ? "open" : ""}`}>
-                            <div className="faq-question" onClick={() => toggleAnswer(index)}>
-                                {faq.QuestionContent}
+            {/* Loading Indicator */}
+            {isLoading ? (
+                <div className="loading-spinner"></div> // 🔹 Loading Animation
+            ) : (
+                <div className="faq-list">
+                    {currentFaqs.length > 0 ? (
+                        currentFaqs.map((faq, index) => (
+                            <div key={index} className={`faq-item ${openIndexes.includes(index) ? "open" : ""}`}>
+                                <div className="faq-question" onClick={() => toggleAnswer(index)}>
+                                    {faq.QuestionContent}
+                                </div>
+                                {openIndexes.includes(index) && <div className="faq-answer">{faq.AnswerContent}</div>}
                             </div>
-                            {openIndexes.includes(index) && <div className="faq-answer">{faq.AnswerContent}</div>}
-                        </div>
-                    ))
-                ) : (
-                    <p>No FAQs found.</p>
-                )}
-            </div>
+                        ))
+                    ) : (
+                        <p>No FAQs found.</p>
+                    )}
+                </div>
+            )}
 
             {/* Pagination */}
             {totalPages > 1 && (
