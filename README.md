@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+Backend Repo:https://github.com/Aswin-Nath/backend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend Repo:https://github.com/Aswin-Nath/BharatFD
 
-## Available Scripts
+Hosted the FAQ app : https://bharat-fd-kappa.vercel.app/
 
-In the project directory, you can run:
+Hosted the Backend Server : https://backend-6jqv.onrender.com/queries
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Unique Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Dynamic Language Translation Using Azure  
+  Supports multiple languages dynamically for better accessibility.
 
-### `npm test`
+- Easier and Simple Design for Admin  
+  User-friendly interface for admins to manage FAQs and queries effortlessly.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Pagination for Efficient Content Loading  
+  Ensures fast loading and smooth navigation, even with large datasets.
 
-### `npm run build`
+- Search Option for Queries in FAQs  
+  Allows users to quickly find relevant information within the FAQs.
+  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**APIS**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Query Management APIs**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Method  | Endpoint         | Description                          | Request Body Example |
+|---------|-----------------|--------------------------------------|----------------------|
+| **POST** | `/add-query` | Submit a user query | `{ "question": "What is Node.js?" }` |
+| **GET**  | `/queries` | Retrieve all submitted queries | _No body required_ |
+| **POST** | `/respond-query` | Respond to a query | `{ "id": 1, "answer": "Node.js is a runtime environment." }` |
 
-### `npm run eject`
+**FAQ Management APIs**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+| Method  | Endpoint         | Description                          | Request Body Example |
+|---------|-----------------|--------------------------------------|----------------------|
+| **POST** | `/add-to-faq` | Add a query to FAQs | `{ "question": "What is Node.js?", "answer": "A JavaScript runtime." }` |
+| **GET**  | `/faqs` | Retrieve all FAQs | _No body required_ |
+| **DELETE** | `/delete-faq/:id` | Delete an FAQ by ID | _No body required_ |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Process of Cloning the frontend
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+# Clone the frontend repository
+git clone https://github.com/Aswin-Nath/BharatFD
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+cd BharatFD
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Install dependencies
+npm install
 
-### Code Splitting
+# Start the frontend
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Frontend will be running in
+http://localhost:3000/
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+process of cloning the Backend
+# Clone the backend repository
+git clone https://github.com/Aswin-Nath/backend
 
-### Making a Progressive Web App
+cd backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Install dependencies
+npm install
 
-### Advanced Configuration
+# Start the backend
+node server.js
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Backend will  be running on 
+http://localhost:5000
