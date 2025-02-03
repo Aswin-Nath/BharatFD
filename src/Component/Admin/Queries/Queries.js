@@ -7,7 +7,8 @@ function Queries() {
   const [activeResponseId, setActiveResponseId] = useState(null);
   const [response, setResponse] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const queriesPerPage = 2; // Limit per page
+  const [queriesPerPage, setQueriesPerPage] = useState(5); // Default per page
+  const [searchQuery, setSearchQuery] = useState(""); // Search term
 
   useEffect(() => {
     fetchQueries();
@@ -15,7 +16,7 @@ function Queries() {
 
   const fetchQueries = async () => {
     try {
-      const response = await fetch("https://backend-6jqv.onrender.com/queries");
+      const response = await fetch("https://backend-omega-seven-22.vercel.app/queries");
       const data = await response.json();
       setQueries(data.sort((a, b) => a.isAnswered - b.isAnswered));
     } catch (error) {
@@ -38,7 +39,7 @@ function Queries() {
     }
 
     try {
-      const res = await fetch("https://backend-6jqv.onrender.com/respond-query", {
+      const res = await fetch("https://backend-omega-seven-22.vercel.app/respond-query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, answer: response[id] }),
@@ -59,7 +60,7 @@ function Queries() {
 
   const addToFAQ = async (id, question, answer) => {
     try {
-      const res = await fetch("https://backend-6jqv.onrender.com/add-to-faq", {
+      const res = await fetch("https://backend-omega-seven-22.vercel.app/add-to-faq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, answer }),
@@ -67,7 +68,7 @@ function Queries() {
 
       if (res.ok) {
         alert("Successfully added to FAQ!");
-        fetchQueries(); // Refresh the list after adding to FAQ
+        fetchQueries();
       } else {
         alert("Failed to add to FAQ.");
       }
@@ -76,30 +77,33 @@ function Queries() {
     }
   };
 
-  // Filtered queries based on answered/unanswered selection
-  const filteredQueries = queries.filter((query) => query.isAnswered === (showAnswered ? 1 : 0));
+  // Filter based on search and answered/unanswered toggle
+  const filteredQueries = queries
+    .filter((query) => query.isAnswered === (showAnswered ? 1 : 0))
+    .filter((query) =>
+      query.QuestionContent.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-  // Pagination Logic (Using filteredQueries length)
+  // Pagination Logic
   const totalPages = Math.ceil(filteredQueries.length / queriesPerPage);
   const indexOfLastQuery = currentPage * queriesPerPage;
   const indexOfFirstQuery = indexOfLastQuery - queriesPerPage;
   const currentQueries = filteredQueries.slice(indexOfFirstQuery, indexOfLastQuery);
 
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="queries-container">
       <h2>Queries</h2>
+
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search queries..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="search-bar"
+      />
 
       {/* Toggle Buttons */}
       <div className="toggle-container">
@@ -110,7 +114,7 @@ function Queries() {
             checked={!showAnswered}
             onChange={() => {
               setShowAnswered(false);
-              setCurrentPage(1); // Reset to first page
+              setCurrentPage(1);
             }}
           />
           Unanswered
@@ -122,12 +126,20 @@ function Queries() {
             checked={showAnswered}
             onChange={() => {
               setShowAnswered(true);
-              setCurrentPage(1); // Reset to first page
+              setCurrentPage(1);
             }}
           />
           Answered
         </label>
       </div>
+
+      {/* Items Per Page Selection */}
+      <label>Show: </label>
+      <select value={queriesPerPage} onChange={(e) => setQueriesPerPage(Number(e.target.value))}>
+        <option value={2}>2</option>
+        <option value={5}>5</option>
+        <option value={10}>10</option>
+      </select>
 
       {/* Table */}
       <table>
@@ -143,7 +155,7 @@ function Queries() {
           {currentQueries.length > 0 ? (
             currentQueries.map((query, index) => (
               <tr key={query.id}>
-                <td>{indexOfFirstQuery + index + 1}</td> {/* Dynamic numbering */}
+                <td>{indexOfFirstQuery + index + 1}</td>
                 <td>{query.QuestionContent}</td>
                 {showAnswered ? (
                   <>
@@ -161,28 +173,18 @@ function Queries() {
                   </>
                 ) : (
                   <td>
-                    {/* Respond Button */}
-                    <button
-                      className="respond-btn"
-                      onClick={() => toggleResponseBox(query.id)}
-                    >
+                    <button className="respond-btn" onClick={() => toggleResponseBox(query.id)}>
                       {activeResponseId === query.id ? "Close" : "Respond"}
                     </button>
 
-                    {/* Response Box */}
                     {activeResponseId === query.id && (
                       <div className="response-box">
                         <textarea
                           value={response[query.id] || ""}
-                          onChange={(e) =>
-                            handleResponseChange(query.id, e.target.value)
-                          }
+                          onChange={(e) => handleResponseChange(query.id, e.target.value)}
                           placeholder="Type your response..."
                         />
-                        <button
-                          className="submit-btn"
-                          onClick={() => submitResponse(query.id)}
-                        >
+                        <button className="submit-btn" onClick={() => submitResponse(query.id)}>
                           Submit
                         </button>
                       </div>
@@ -202,17 +204,19 @@ function Queries() {
       {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="pagination">
-          <button className="page-btn" onClick={prevPage} disabled={currentPage === 1}>
+          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             Previous
           </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            className="page-btn"
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-          >
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              className={currentPage === i + 1 ? "active" : ""}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
             Next
           </button>
         </div>
